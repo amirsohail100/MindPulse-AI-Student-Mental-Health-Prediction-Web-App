@@ -70,4 +70,20 @@ Through this project, I have mastered end-to-end production ML pipelines and mod
 
 ---
 
+## 📂 Repository Directory Structure
+
+```text
+.
+├── Mental_Health_Model.pkl           # Trained Keras Artificial Neural Network (ANN) model
+├── notebook.ipynb                    # Jupyter Notebook (EDA, Preprocessing, ANN Training)
+├── scaler.pkl                        # StandardScaler object for input normalization
+├── columns.pkl                       # List of input features for ANN model
+├── Student_Social_Media             # Dataset containing audio/speech acoustic features
+├── UI.png                            # UI Screenshot
+├── requirements.txt                  # Python dependencies
+├── style.css                         # CSS for Streamlit frontend
+├── script.js                         # JavaScript for Streamlit frontend
+└── index.html                        # Streamlit frontend
+```
+
 MindPulse AI: A production-grade ML web app predicting student mental health scores based on daily lifestyle habits. Features an upgraded workflow: Scikit-learn Pipeline &amp; ColumnTransformer for leak-free training, FastAPI + Pydantic for schema validation, and an interactive HTML/JS frontend live deployed on Render.
