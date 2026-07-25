@@ -12,7 +12,7 @@
 
 ### 📸 Application Interface
 
-![MindPulse AI UI Preview](YOUR_IMAGE_LINK_OR_PATH_HERE)
+![MindPulse AI UI Preview](UI.png)
 _(Replace this placeholder with your actual UI screenshot path or link)_
 
 ---
@@ -69,13 +69,5 @@ Through this project, I have mastered end-to-end production ML pipelines and mod
 | **Random Forest (Tuned)**   | **0.8650** | **0.9547**     | **0.3689** | **0.4869** |
 
 ---
-
-## ⚡ Local Setup Instructions
-
-1. **Clone the repository**:
-   ```bash
-   git clone [https://github.com/your-username/mindpulse-ai.git](https://github.com/your-username/mindpulse-ai.git)
-   cd mindpulse-ai
-   ```
 
 MindPulse AI: A production-grade ML web app predicting student mental health scores based on daily lifestyle habits. Features an upgraded workflow: Scikit-learn Pipeline &amp; ColumnTransformer for leak-free training, FastAPI + Pydantic for schema validation, and an interactive HTML/JS frontend live deployed on Render.
