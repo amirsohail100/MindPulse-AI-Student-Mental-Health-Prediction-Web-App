@@ -2,7 +2,7 @@
 
 [![Live App](https://img.shields.io/badge/Render-Live%20Demo-brightgreen?style=for-the-badge&logo=render)](YOUR_RENDER_LIVE_LINK_HERE)
 
-**MindPulse AI** ek Machine Learning-powered full-stack web application hai jo students ke daily habits (sleep, study hours, social media usage, physical activity) ke aadhar par unke Mental Health Score ko predict karta hai.
+**MindPulse AI** is a Machine Learning-powered full-stack web application that predicts a student's Mental Health Score based on their daily habits (sleep duration, study hours, social media usage, physical activity, etc.).
 
 ---
 
@@ -13,50 +13,50 @@
 ### 📸 Application Interface
 
 ![MindPulse AI UI Preview](YOUR_IMAGE_LINK_OR_PATH_HERE)
-_(Apni screenshots/UI ki image ka link ya path upar paste karein)_
+_(Replace this placeholder with your actual UI screenshot path or link)_
 
 ---
 
-## 🚀 Old Flow vs. New Flow (My Progress)
+## 🚀 Old Flow vs. New Flow (Project Evolution)
 
-Is project me maine apne ML workflow ko ek naye production-ready level par upgrade kiya hai:
+This project represents a major architectural upgrade in my Machine Learning engineering workflow towards production-ready standards:
 
 | Feature / Step       | 🔴 Old Flow                   | 🟢 New Flow (Upgraded)                                                    |
 | :------------------- | :---------------------------- | :------------------------------------------------------------------------ |
 | **Deployment**       | Streamlit UI                  | **Render Web Service** (FastAPI Backend + HTML/JS Frontend)               |
 | **Preprocessing**    | Manual Ad-hoc Transformations | **Scikit-learn `ColumnTransformer`** (Automated & Leak-free)              |
-| **Model Training**   | Manual Loops & Loose Scripts  | **Integrated ML Pipelines** (`Pipeline([('prep', ...), ('model', ...)])`) |
+| **Model Training**   | Manual Loops & Ad-hoc Scripts | **Integrated ML Pipelines** (`Pipeline([('prep', ...), ('model', ...)])`) |
 | **API & Validation** | Raw JSON / Basic Flask        | **FastAPI + Pydantic Schema Validation**                                  |
-| **Frontend**         | Streamlit Default UI          | **Custom UI** (Vanilla HTML5, Modern CSS, JavaScript Fetch API)           |
+| **Frontend**         | Default Streamlit UI          | **Custom UI** (Vanilla HTML5, Modern CSS, JavaScript Fetch API)           |
 
 ---
 
 ## 🔮 Future Integration Plan (Upgrading Legacy Projects)
 
-Maine is project ke zariye production-grade Machine Learning pipeline aur deployment seekha hai. **Aage chal kar main apne jitne bhi puraane ML aur Deep Learning (DL) projects hain, un sabhi me in same features ko integrate/upgrade karunga:**
+Through this project, I have mastered end-to-end production ML pipelines and modular deployment strategies. **Going forward, I will retrofit and upgrade all my legacy ML and Deep Learning (DL) projects with these same features:**
 
-- ⚙️ **End-to-End Pipeline & Column Transformers:** Preprocessing aur model fitting ko single Sklearn pipeline me migrate karna.
-- ⚡ **FastAPI Migration:** Puraane Streamlit / Flask endpoints ko fast, async, aur modular FastAPI backend se replace karna.
-- 🛡️ **Pydantic Validation & Security:** Strict schema checks, error handling, aur environment variables (`.env` / config) se API keys aur URLs ko secure & hide karna.
+- ⚙️ **End-to-End Pipelines:** Transitioning manual preprocessing and model fitting into unified Scikit-learn pipelines.
+- ⚡ **FastAPI Migration:** Replacing legacy Streamlit / Flask endpoints with fast, asynchronous, and modular FastAPI backends.
+- 🛡️ **Pydantic Validation & Security:** Implementing strict schema validation, robust error handling, and environment-driven configurations (`.env`) to securely manage API keys and backend endpoints.
 
 ---
 
 ## 🛠️ Project Architecture & Tech Stack
 
 1. **Machine Learning Pipeline (`notebook.ipynb`)**:
-   - Data cleaning, log transformations, outlier removal.
-   - Categorical feature encoding & scaling using `ColumnTransformer`.
-   - Model comparison: Linear Regression vs. Random Forest (Default & Tuned).
-   - Pipeline serialization via `joblib`.
+   - Data cleaning, log transformations, and outlier treatment.
+   - Categorical feature encoding and scaling via `ColumnTransformer`.
+   - Model selection & evaluation: Linear Regression vs. Random Forest (Default & Tuned).
+   - Pipeline serialization using `joblib`.
 
 2. **Backend API (`main.py`)**:
-   - **FastAPI**: Asynchronous & high-performance Web API framework.
-   - **Pydantic**: Input schema validation and field-level constraint enforcement (`age`, `study_hours`, `stress_level`, etc.).
-   - **CORS Middleware**: Secure cross-origin requests.
+   - **FastAPI**: Asynchronous and high-performance Web API framework.
+   - **Pydantic**: Input schema validation with field-level constraints (`age`, `study_hours`, `stress_level`, etc.).
+   - **CORS Middleware**: Safe cross-origin request handling.
 
 3. **Frontend (`index.html`, `script.js`, `style.css`)**:
    - Interactive gauge dashboard for visual score representation.
-   - Dynamic error messaging & client/server validation handling.
+   - Dynamic error handling for both client-side and server-side validation.
 
 ---
 
