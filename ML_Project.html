@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ML → API → Web — Build Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0A2E4D;
+    --navy-deep:#071F36;
+    --grid:#163F63;
+    --cyan:#6FD3E0;
+    --cyan-dim:#3E7E8C;
+    --paper:#EAF2F5;
+    --slate:#8FAFC2;
+    --amber:#F2A65A;
+    --sheet:#0D3557;
+    --line:rgba(111,211,224,0.28);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--navy-deep);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size:34px 34px;
+    color:var(--paper);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+  }
+  ::selection{background:var(--amber); color:var(--navy-deep);}
+  a{color:var(--cyan);}
+
+  .display{font-family:'Barlow Condensed', sans-serif; text-transform:uppercase; letter-spacing:0.04em;}
+  code, .mono{font-family:'IBM Plex Mono', monospace;}
+
+  /* ===== Title block / hero ===== */
+  .titleblock{
+    border:1px solid var(--line);
+    margin:24px;
+    padding:32px clamp(20px,4vw,56px);
+    position:relative;
+    background:linear-gradient(180deg, rgba(111,211,224,0.04), transparent 60%);
+  }
+  .titleblock::before, .titleblock::after{
+    content:'+'; position:absolute; color:var(--cyan-dim); font-size:14px;
+  }
+  .titleblock::before{top:-9px; left:-9px;}
+  .titleblock::after{bottom:-9px; right:-9px;}
+  .stamp-row{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--slate);
+    border-bottom:1px solid var(--line); padding-bottom:14px; margin-bottom:22px;
+    letter-spacing:0.03em;
+  }
+  .stamp-row span b{color:var(--cyan); font-weight:500;}
+  h1.proj-title{
+    font-size:clamp(2.2rem, 5.5vw, 4.2rem);
+    line-height:1.02; font-weight:700; color:var(--paper);
+  }
+  h1.proj-title em{color:var(--cyan); font-style:normal;}
+  .proj-sub{color:var(--slate); font-size:1.05rem; margin-top:14px; max-width:640px;}
+
+  /* ===== schematic pipeline ===== */
+  .schematic{margin-top:36px; overflow-x:auto;}
+  .schematic svg{width:100%; min-width:560px; height:auto; display:block;}
+  .flow-line{stroke:var(--cyan-dim); stroke-width:2; fill:none; stroke-dasharray:6 8;
+    animation:flow 1.6s linear infinite;}
+  @keyframes flow{to{stroke-dashoffset:-56;}}
+  .node-box{fill:var(--sheet); stroke:var(--cyan-dim); stroke-width:1.3;}
+  .node-box.active{stroke:var(--amber);}
+  .node-label{font-family:'IBM Plex Mono', monospace; font-size:11px; fill:var(--paper); letter-spacing:0.02em;}
+  .node-sub{font-family:'IBM Plex Mono', monospace; font-size:9px; fill:var(--slate);}
+
+  /* ===== layout ===== */
+  .layout{display:grid; grid-template-columns:220px 1fr; gap:0; max-width:1180px; margin:0 auto; padding:0 24px 80px;}
+  @media (max-width:860px){ .layout{grid-template-columns:1fr;} }
+
+  /* sidebar */
+  .sidebar{position:sticky; top:20px; align-self:start; height:fit-content; padding-top:8px;}
+  @media (max-width:860px){
+    .sidebar{position:relative; top:0; display:flex; overflow-x:auto; gap:8px; padding:12px 0; margin-bottom:8px;}
+  }
+  .sheet-index{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--slate); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px;}
+  .nav-item{
+    display:flex; align-items:center; gap:10px;
+    padding:10px 12px; border-left:2px solid var(--grid);
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--slate);
+    cursor:pointer; text-decoration:none; transition:.15s;
+    white-space:nowrap;
+  }
+  .nav-item:hover{color:var(--paper); border-left-color:var(--cyan-dim);}
+  .nav-item.active{color:var(--cyan); border-left-color:var(--amber); background:rgba(111,211,224,0.06);}
+  .nav-item .num{color:var(--amber); font-weight:500;}
+  .progress-wrap{margin-top:22px; padding:14px; border:1px solid var(--line);}
+  .progress-wrap .label{font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--slate); display:flex; justify-content:space-between; margin-bottom:8px;}
+  .progress-bar{height:6px; background:var(--grid); position:relative; overflow:hidden;}
+  .progress-fill{height:100%; background:var(--amber); width:0%; transition:width .35s ease;}
+
+  /* main sheets */
+  .sheet{
+    border:1px solid var(--line); margin:20px 0 32px; padding:clamp(20px,3.5vw,40px);
+    position:relative; scroll-margin-top:20px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.015), transparent 12%);
+  }
+  .sheet-corner{
+    position:absolute; top:0; right:0; font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px; color:var(--navy-deep); background:var(--cyan);
+    padding:5px 12px; letter-spacing:0.05em;
+  }
+  .sheet h2{
+    font-family:'Barlow Condensed', sans-serif; text-transform:uppercase; letter-spacing:0.02em;
+    font-size:clamp(1.6rem,3vw,2.3rem); color:var(--paper); font-weight:600;
+    display:flex; align-items:baseline; gap:14px; margin-bottom:6px;
+  }
+  .sheet h2 .tag{font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--amber); letter-spacing:0.1em;}
+  .sheet .deck{color:var(--slate); font-size:.98rem; margin-bottom:26px; max-width:680px;}
+  .sheet h3{font-size:1.05rem; color:var(--cyan); font-weight:600; margin:26px 0 10px; display:flex; align-items:center; gap:8px;}
+  .sheet h3::before{content:''; width:14px; height:1px; background:var(--cyan-dim); display:inline-block;}
+  .sheet p{color:var(--paper); font-size:.95rem; margin-bottom:10px; max-width:700px;}
+  .sheet ul{margin:8px 0 8px 20px; color:var(--paper); font-size:.94rem;}
+  .sheet ul li{margin-bottom:6px;}
+  .sheet ul li b{color:var(--cyan);}
+
+  /* checklist */
+  .checklist{list-style:none; margin:12px 0 4px; padding:0;}
+  .checklist li{
+    display:flex; align-items:flex-start; gap:10px; padding:7px 0;
+    border-bottom:1px dashed var(--line); font-size:.92rem;
+  }
+  .checklist li:last-child{border-bottom:none;}
+  .checklist input[type=checkbox]{
+    appearance:none; width:16px; height:16px; min-width:16px; margin-top:2px;
+    border:1px solid var(--cyan-dim); background:transparent; cursor:pointer; position:relative;
+  }
+  .checklist input[type=checkbox]:checked{background:var(--amber); border-color:var(--amber);}
+  .checklist input[type=checkbox]:checked::after{
+    content:'✓'; position:absolute; top:-3px; left:2px; font-size:12px; color:var(--navy-deep);
+  }
+  .checklist label{cursor:pointer;}
+  .checklist li.done label{color:var(--slate); text-decoration:line-through;}
+
+  /* code blocks */
+  .code-wrap{position:relative; margin:14px 0 18px;}
+  pre{
+    background:var(--navy-deep); border:1px solid var(--line); padding:16px 18px;
+    overflow-x:auto; font-size:.83rem; color:#CFE9EE; border-left:3px solid var(--cyan-dim);
+  }
+  .copy-btn{
+    position:absolute; top:8px; right:8px; font-family:'IBM Plex Mono',monospace; font-size:10.5px;
+    background:var(--sheet); color:var(--slate); border:1px solid var(--line);
+    padding:4px 9px; cursor:pointer; letter-spacing:.04em; transition:.15s;
+  }
+  .copy-btn:hover{color:var(--cyan); border-color:var(--cyan-dim);}
+  .copy-btn.copied{color:var(--amber); border-color:var(--amber);}
+
+  /* accordion */
+  .accordion{border:1px solid var(--line); margin:14px 0;}
+  .accordion-head{
+    display:flex; justify-content:space-between; align-items:center; cursor:pointer;
+    padding:12px 16px; font-family:'IBM Plex Mono', monospace; font-size:.85rem; color:var(--cyan);
+    user-select:none;
+  }
+  .accordion-head .plus{color:var(--amber); transition:transform .2s;}
+  .accordion.open .plus{transform:rotate(45deg);}
+  .accordion-body{max-height:0; overflow:hidden; transition:max-height .3s ease; padding:0 16px;}
+  .accordion.open .accordion-body{padding:4px 16px 16px;}
+
+  /* tabs */
+  .tabs{display:flex; gap:4px; margin:16px 0 0; flex-wrap:wrap;}
+  .tab-btn{
+    font-family:'IBM Plex Mono',monospace; font-size:.78rem; padding:8px 14px;
+    background:var(--sheet); color:var(--slate); border:1px solid var(--line); cursor:pointer;
+  }
+  .tab-btn.active{color:var(--navy-deep); background:var(--cyan); border-color:var(--cyan);}
+  .tab-panel{display:none; border:1px solid var(--line); border-top:none; padding:16px;}
+  .tab-panel.active{display:block;}
+
+  .callout{
+    border-left:3px solid var(--amber); background:rgba(242,166,90,0.06);
+    padding:12px 16px; margin:16px 0; font-size:.9rem; color:var(--paper);
+  }
+  .callout b{color:var(--amber);}
+
+  footer{
+    text-align:center; padding:40px 24px; color:var(--slate); font-family:'IBM Plex Mono', monospace;
+    font-size:.8rem; border-top:1px solid var(--line); margin-top:20px;
+  }
+  footer b{color:var(--cyan);}
+</style>
+</head>
+<body>
+
+<div class="titleblock">
+  <div class="stamp-row">
+    <span>PROJECT NO. <b>ML-WEB-01</b></span>
+    <span>SCALE <b>N.T.S.</b></span>
+    <span>SHEETS <b id="sheetCountLabel">5</b></span>
+    <span>STATUS <b id="statusStamp">IN PROGRESS</b></span>
+  </div>
+  <h1 class="proj-title">Build &amp; Ship an <em>ML‑Powered</em> Web App</h1>
+  <p class="proj-sub">A five-sheet construction guide: train a model, wrap it in FastAPI, validate with Pydantic, connect a plain HTML/CSS/JS frontend, and ship it on Render.</p>
+
+  <div class="schematic">
+    <svg viewBox="0 0 980 150" id="pipelineSvg">
+      <!-- connecting lines -->
+      <path class="flow-line" d="M120,75 L260,75"></path>
+      <path class="flow-line" d="M380,75 L520,75"></path>
+      <path class="flow-line" d="M640,75 L780,75"></path>
+      <path class="flow-line" d="M900,75 L940,75"></path>
+      <!-- nodes -->
+      <g id="node-0"><rect class="node-box" x="10" y="45" width="110" height="60" rx="2"></rect>
+        <text class="node-label" x="65" y="72" text-anchor="middle">DATA</text>
+        <text class="node-sub" x="65" y="88" text-anchor="middle">Phase 01</text></g>
+      <g id="node-1"><rect class="node-box" x="260" y="45" width="120" height="60" rx="2"></rect>
+        <text class="node-label" x="320" y="72" text-anchor="middle">MODEL</text>
+        <text class="node-sub" x="320" y="88" text-anchor="middle">Phase 01</text></g>
+      <g id="node-2"><rect class="node-box" x="520" y="45" width="120" height="60" rx="2"></rect>
+        <text class="node-label" x="580" y="66" text-anchor="middle">FASTAPI</text>
+        <text class="node-sub" x="580" y="80" text-anchor="middle">+ PYDANTIC</text>
+        <text class="node-sub" x="580" y="93" text-anchor="middle">Phase 02–03</text></g>
+      <g id="node-3"><rect class="node-box" x="780" y="45" width="120" height="60" rx="2"></rect>
+        <text class="node-label" x="840" y="72" text-anchor="middle">UI</text>
+        <text class="node-sub" x="840" y="88" text-anchor="middle">Phase 04</text></g>
+      <g id="node-4"><rect class="node-box" x="940" y="45" width="34" height="60" rx="2"></rect>
+        <text class="node-label" x="957" y="72" text-anchor="middle" font-size="9">▶</text>
+        <text class="node-sub" x="957" y="88" text-anchor="middle">05</text></g>
+    </svg>
+  </div>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sheet-index">Sheet Index</div>
+    <a class="nav-item" data-target="phase1"><span class="num">01</span> Model Build</a>
+    <a class="nav-item" data-target="phase2"><span class="num">02</span> FastAPI</a>
+    <a class="nav-item" data-target="phase3"><span class="num">03</span> Pydantic</a>
+    <a class="nav-item" data-target="phase4"><span class="num">04</span> Frontend</a>
+    <a class="nav-item" data-target="phase5"><span class="num">05</span> Deployment</a>
+
+    <div class="progress-wrap">
+      <div class="label"><span>OVERALL</span><span id="overallPct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="overallFill"></div></div>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- PHASE 1 -->
+    <section class="sheet" id="phase1">
+      <div class="sheet-corner">SHEET 01 / 05</div>
+      <h2><span class="tag">01</span> Machine Learning Model Build</h2>
+      <p class="deck">Everything upstream of the API. Get this sheet right and the rest of the build is straightforward.</p>
+
+      <h3>Notebook checklist — steps we actually performed</h3>
+      <ul class="checklist" data-phase="1">
+        <li><input type="checkbox" id="c1-1"><label for="c1-1">Import libraries — pandas, numpy, matplotlib/seaborn, scikit-learn, joblib</label></li>
+        <li><input type="checkbox" id="c1-2"><label for="c1-2">Load the dataset and check shape &amp; column names</label></li>
+        <li><input type="checkbox" id="c1-3"><label for="c1-3">Basic data understanding — data types, missing values, duplicate rows, summary statistics</label></li>
+        <li><input type="checkbox" id="c1-4"><label for="c1-4">Exploratory Data Analysis — target distribution, correlation heatmap, stress vs score, usage vs score, sleep vs score, platform counts</label></li>
+        <li><input type="checkbox" id="c1-5"><label for="c1-5">Data cleaning — drop duplicate rows, fix an invalid negative value found in the data</label></li>
+        <li><input type="checkbox" id="c1-6"><label for="c1-6">Check skewness on numeric columns, log-transform the one column that needed it</label></li>
+        <li><input type="checkbox" id="c1-7"><label for="c1-7">Feature engineering — group a high-cardinality column into top categories + "Other"</label></li>
+        <li><input type="checkbox" id="c1-8"><label for="c1-8">Decide encoding strategy — ordinal for ordered categories, one-hot for unordered ones</label></li>
+        <li><input type="checkbox" id="c1-9"><label for="c1-9">Train/test split, done before any preprocessing to avoid data leakage</label></li>
+        <li><input type="checkbox" id="c1-10"><label for="c1-10">Build preprocessing with <code>ColumnTransformer</code> — impute, scale, encode</label></li>
+        <li><input type="checkbox" id="c1-11"><label for="c1-11">Wrap preprocessing + model together in a single <code>Pipeline</code></label></li>
+        <li><input type="checkbox" id="c1-12"><label for="c1-12">Train a baseline model, then a stronger model on the same pipeline</label></li>
+        <li><input type="checkbox" id="c1-13"><label for="c1-13">Hyperparameter tuning with <code>RandomizedSearchCV</code></label></li>
+        <li><input type="checkbox" id="c1-14"><label for="c1-14">Evaluate and compare models with proper metrics</label></li>
+        <li><input type="checkbox" id="c1-15"><label for="c1-15">Check feature importance to confirm the model learned sensible patterns</label></li>
+        <li><input type="checkbox" id="c1-16"><label for="c1-16">Save the complete pipeline with <code>joblib.dump()</code></label></li>
+        <li><input type="checkbox" id="c1-17"><label for="c1-17">Run one prediction example end-to-end to sanity-check the saved pipeline</label></li>
+      </ul>
+
+      <div class="callout"><b>Why it matters:</b> we save the whole pipeline, not just the raw model — the FastAPI backend can then call <code>predict()</code> directly on raw input without reimplementing any preprocessing.</div>
+    </section>
+
+    <!-- PHASE 2 -->
+    <section class="sheet" id="phase2">
+      <div class="sheet-corner">SHEET 02 / 05</div>
+      <h2><span class="tag">02</span> FastAPI Service Layer</h2>
+      <p class="deck">Wraps the saved pipeline behind a clean, documented HTTP interface.</p>
+
+      <ul class="checklist" data-phase="2">
+        <li><input type="checkbox" id="c2-1"><label for="c2-1">Load <code>model.pkl</code> once at startup (not per-request)</label></li>
+        <li><input type="checkbox" id="c2-2"><label for="c2-2">Create a <code>/predict</code> POST route</label></li>
+        <li><input type="checkbox" id="c2-3"><label for="c2-3">Mount static frontend from the same app (avoids CORS)</label></li>
+        <li><input type="checkbox" id="c2-4"><label for="c2-4">Add a <code>/health</code> route for uptime checks</label></li>
+      </ul>
+
+      <div class="callout"><b>Gotcha:</b> serving frontend + API from one FastAPI app means same-origin requests — no CORS headers to configure at all.</div>
+    </section>
+
+    <!-- PHASE 3 -->
+    <section class="sheet" id="phase3">
+      <div class="sheet-corner">SHEET 03 / 05</div>
+      <h2><span class="tag">03</span> Pydantic Validation</h2>
+      <p class="deck">The contract between frontend input and model input — reject bad data before it reaches the pipeline.</p>
+
+      <ul class="checklist" data-phase="3">
+        <li><input type="checkbox" id="c3-1"><label for="c3-1">Define a request schema with one typed field per model input</label></li>
+        <li><input type="checkbox" id="c3-2"><label for="c3-2">Add validation constraints so bad values are rejected automatically</label></li>
+        <li><input type="checkbox" id="c3-3"><label for="c3-3">Define a response schema for the prediction output</label></li>
+        <li><input type="checkbox" id="c3-4"><label for="c3-4">Wire both schemas into the <code>/predict</code> route</label></li>
+      </ul>
+
+      <div class="callout"><b>On camera:</b> send a bad request (e.g. a negative age) and show FastAPI's auto-generated 422 error — this is the moment that sells Pydantic to viewers.</div>
+    </section>
+
+    <!-- PHASE 4 -->
+    <section class="sheet" id="phase4">
+      <div class="sheet-corner">SHEET 04 / 05</div>
+      <h2><span class="tag">04</span> Frontend (HTML/CSS/JS)</h2>
+      <p class="deck">No framework needed — plain <code>fetch()</code> is the whole integration.</p>
+
+      <ul class="checklist" data-phase="4">
+        <li><input type="checkbox" id="c4-1"><label for="c4-1">Build form in <code>index.html</code></label></li>
+        <li><input type="checkbox" id="c4-2"><label for="c4-2">POST form data via <code>fetch</code> in <code>script.js</code></label></li>
+        <li><input type="checkbox" id="c4-3"><label for="c4-3">Render prediction + confidence in the DOM</label></li>
+        <li><input type="checkbox" id="c4-4"><label for="c4-4">Handle loading + error states visibly</label></li>
+      </ul>
+
+    </section>
+
+    <!-- PHASE 5 -->
+    <section class="sheet" id="phase5">
+      <div class="sheet-corner">SHEET 05 / 05</div>
+      <h2><span class="tag">05</span> Deployment — Render</h2>
+      <p class="deck">One web service, one repo, one build command.</p>
+
+      <ul class="checklist" data-phase="5">
+        <li><input type="checkbox" id="c5-1"><label for="c5-1">Push repo to GitHub</label></li>
+        <li><input type="checkbox" id="c5-2"><label for="c5-2">New Web Service on Render, connect repo</label></li>
+        <li><input type="checkbox" id="c5-3"><label for="c5-3">Build command: <code>pip install -r requirements.txt</code></label></li>
+        <li><input type="checkbox" id="c5-4"><label for="c5-4">Start command uses <code>$PORT</code>, not a hardcoded port</label></li>
+      </ul>
+
+      <div class="callout"><b>Free tier note:</b> the service spins down when idle — first request after inactivity can take 30–50s to wake. Explain this on camera so a live demo doesn't look broken.</div>
+    </section>
+
+    <footer>
+      All five sheets checked → ship it. <b>ML → API → Web</b> — built for the video, built to actually work.
+    </footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  // ---- checklist state + progress ----
+  const phases = {1:8, 2:4, 3:0, 4:4, 5:4}; // item counts per phase (phase3 has none, counted via itself if added later)
+  const allBoxes = Array.from(document.querySelectorAll('.checklist input[type=checkbox]'));
+
+  function updateProgress(){
+    const total = allBoxes.length;
+    const checked = allBoxes.filter(b => b.checked).length;
+    const pct = total ? Math.round((checked/total)*100) : 0;
+    document.getElementById('overallPct').textContent = pct + '%';
+    document.getElementById('overallFill').style.width = pct + '%';
+    document.getElementById('statusStamp').textContent = pct === 100 ? 'COMPLETE' : (pct === 0 ? 'NOT STARTED' : 'IN PROGRESS');
+  }
+
+  allBoxes.forEach(box => {
+    box.addEventListener('change', () => {
+      box.closest('li').classList.toggle('done', box.checked);
+      updateProgress();
+    });
+  });
+  updateProgress();
+
+  // ---- copy buttons ----
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pre = btn.nextElementSibling;
+      navigator.clipboard.writeText(pre.textContent).then(() => {
+        btn.textContent = 'COPIED';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 1400);
+      });
+    });
+  });
+
+  // ---- accordion ----
+  document.querySelectorAll('.accordion-head').forEach(head => {
+    head.addEventListener('click', () => {
+      const acc = head.parentElement;
+      const body = acc.querySelector('.accordion-body');
+      const isOpen = acc.classList.toggle('open');
+      body.style.maxHeight = isOpen ? body.scrollHeight + 'px' : '0px';
+    });
+  });
+
+  // ---- tabs ----
+  document.querySelectorAll('[data-tabgroup]').forEach(group => {
+    const buttons = group.querySelectorAll('.tab-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const panels = group.parentElement.querySelectorAll('.tab-panel');
+        panels.forEach(p => p.classList.toggle('active', p.dataset.panel === btn.dataset.tab));
+      });
+    });
+  });
+
+  // ---- sidebar nav + scroll spy ----
+  const navItems = document.querySelectorAll('.nav-item');
+  const sections = Array.from(navItems).map(n => document.getElementById(n.dataset.target));
+
+  navItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById(item.dataset.target).scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting){
+        navItems.forEach(n => n.classList.toggle('active', n.dataset.target === entry.target.id));
+        const idx = sections.findIndex(s => s.id === entry.target.id);
+        document.querySelectorAll('.node-box').forEach(nb => nb.classList.remove('active'));
+        const node = document.getElementById('node-' + Math.min(idx, 4));
+        if (node) node.querySelector('.node-box').classList.add('active');
+      }
+    });
+  }, {rootMargin: '-40% 0px -50% 0px'});
+
+  sections.forEach(s => s && observer.observe(s));
+})();
+</script>
+
+</body>
+</html>
