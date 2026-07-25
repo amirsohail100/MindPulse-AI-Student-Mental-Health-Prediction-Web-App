@@ -1,6 +1,19 @@
 # 🧠 MindPulse AI — Student Mental Health Prediction Web App
 
+[![Live App](https://img.shields.io/badge/Render-Live%20Demo-brightgreen?style=for-the-badge&logo=render)](YOUR_RENDER_LIVE_LINK_HERE)
+
 **MindPulse AI** ek Machine Learning-powered full-stack web application hai jo students ke daily habits (sleep, study hours, social media usage, physical activity) ke aadhar par unke Mental Health Score ko predict karta hai.
+
+---
+
+## 🌐 Live Demo & UI Preview
+
+- **Live Application:** [Click Here to Access MindPulse AI](YOUR_RENDER_LIVE_LINK_HERE)
+
+### 📸 Application Interface
+
+![MindPulse AI UI Preview](YOUR_IMAGE_LINK_OR_PATH_HERE)
+_(Apni screenshots/UI ki image ka link ya path upar paste karein)_
 
 ---
 
@@ -15,6 +28,16 @@ Is project me maine apne ML workflow ko ek naye production-ready level par upgra
 | **Model Training**   | Manual Loops & Loose Scripts  | **Integrated ML Pipelines** (`Pipeline([('prep', ...), ('model', ...)])`) |
 | **API & Validation** | Raw JSON / Basic Flask        | **FastAPI + Pydantic Schema Validation**                                  |
 | **Frontend**         | Streamlit Default UI          | **Custom UI** (Vanilla HTML5, Modern CSS, JavaScript Fetch API)           |
+
+---
+
+## 🔮 Future Integration Plan (Upgrading Legacy Projects)
+
+Maine is project ke zariye production-grade Machine Learning pipeline aur deployment seekha hai. **Aage chal kar main apne jitne bhi puraane ML aur Deep Learning (DL) projects hain, un sabhi me in same features ko integrate/upgrade karunga:**
+
+- ⚙️ **End-to-End Pipeline & Column Transformers:** Preprocessing aur model fitting ko single Sklearn pipeline me migrate karna.
+- ⚡ **FastAPI Migration:** Puraane Streamlit / Flask endpoints ko fast, async, aur modular FastAPI backend se replace karna.
+- 🛡️ **Pydantic Validation & Security:** Strict schema checks, error handling, aur environment variables (`.env` / config) se API keys aur URLs ko secure & hide karna.
 
 ---
 
