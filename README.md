@@ -89,7 +89,7 @@ Through this project, I have mastered end-to-end production ML pipelines and mod
 ```
 
 ```bash
-git clone https://github.com/amirsohail100/Telehealth-AI-Real-Time-Patient-Voice-Urgency-Triage.git
+git clone https://github.com/amirsohail100/MindPulse-AI-Student-Mental-Health-Prediction-Web-App.git
 ```
 
 ```bash
