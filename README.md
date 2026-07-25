@@ -80,6 +80,8 @@ Through this project, I have mastered end-to-end production ML pipelines and mod
 ├── columns.pkl                       # List of input features for ANN model
 ├── Student_Social_Media             # Dataset containing audio/speech acoustic features
 ├── UI.png                            # UI Screenshot
+├── .gitignore                        # Git ignore file
+├── .gitattributes                    # Git attributes file
 ├── requirements.txt                  # Python dependencies
 ├── style.css                         # CSS for Streamlit frontend
 ├── script.js                         # JavaScript for Streamlit frontend
