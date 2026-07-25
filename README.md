@@ -93,7 +93,7 @@ git clone https://github.com/amirsohail100/MindPulse-AI-Student-Mental-Health-Pr
 ```
 
 ```bash
-cd Telehealth-AI-Real-Time-Patient-Voice-Urgency-Triage
+cd MindPulse-AI-Student-Mental-Health-Prediction-Web-App
 ```
 
 ```bash
