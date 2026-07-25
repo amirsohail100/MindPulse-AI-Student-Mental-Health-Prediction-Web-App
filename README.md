@@ -88,4 +88,28 @@ Through this project, I have mastered end-to-end production ML pipelines and mod
 └── index.html                        # Streamlit frontend
 ```
 
+```bash
+git clone https://github.com/amirsohail100/Telehealth-AI-Real-Time-Patient-Voice-Urgency-Triage.git
+```
+
+```bash
+cd Telehealth-AI-Real-Time-Patient-Voice-Urgency-Triage
+```
+
+```bash
+streamlit run app.py
+```
+
+```bash
+python install -r requirements.txt
+```
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 📝 Author
+
+👤 **Amir Sohail**
+
 MindPulse AI: A production-grade ML web app predicting student mental health scores based on daily lifestyle habits. Features an upgraded workflow: Scikit-learn Pipeline &amp; ColumnTransformer for leak-free training, FastAPI + Pydantic for schema validation, and an interactive HTML/JS frontend live deployed on Render.
