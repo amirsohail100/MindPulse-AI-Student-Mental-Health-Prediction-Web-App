@@ -76,9 +76,7 @@ Through this project, I have mastered end-to-end production ML pipelines and mod
 .
 ├── Mental_Health_Model.pkl           # Trained Keras Artificial Neural Network (ANN) model
 ├── notebook.ipynb                    # Jupyter Notebook (EDA, Preprocessing, ANN Training)
-├── scaler.pkl                        # StandardScaler object for input normalization
-├── columns.pkl                       # List of input features for ANN model
-├── Student_Social_Media             # Dataset containing audio/speech acoustic features
+├── Student_Social_Media              # Dataset containing audio/speech acoustic features
 ├── UI.png                            # UI Screenshot
 ├── .gitignore                        # Git ignore file
 ├── .gitattributes                    # Git attributes file
