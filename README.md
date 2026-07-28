@@ -1,6 +1,6 @@
 # 🧠 MindPulse AI — Student Mental Health Prediction Web App
 
-[![Live App](https://img.shields.io/badge/Render-Live%20Demo-brightgreen?style=for-the-badge&logo=render)](YOUR_RENDER_LIVE_LINK_HERE)
+[![Live App](https://mindpulse-ai-student-mental-health-i9vu.onrender.com)](YOUR_RENDER_LIVE_LINK_HERE)
 
 **MindPulse AI** is a Machine Learning-powered full-stack web application that predicts a student's Mental Health Score based on their daily habits (sleep duration, study hours, social media usage, physical activity, etc.).
 
