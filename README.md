@@ -100,7 +100,7 @@ streamlit run app.py
 ```
 
 ```bash
-python install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ## 📄 License
