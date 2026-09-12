@@ -12,7 +12,7 @@
 
 ### 📸 Application Interface
 
-![MindPulse AI UI Preview](UI.png)
+![MindPulse AI UI Preview](assets\UI.png)
 _(Replace this placeholder with your actual UI screenshot path or link)_
 
 ---
